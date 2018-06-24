@@ -13,15 +13,12 @@ require term.fs
 
 : handle-input
   begin
-    rDIV c@ [ $FF 8 / ]L < if
-      key-state
-      dup k-right and if -5 rSCX+! then
-      dup k-left  and if  5 rSCX+! then
-      dup k-up    and if  5 rSCY+! then
-      dup k-down  and if -5 rSCY+! then
-      \ If there no key pressed, wait for one
-      0= if halt then
-    then
+    key case
+      k-right of -5 rSCX+! endof
+      k-left  of  5 rSCX+! endof
+      k-up    of  5 rSCY+! endof
+      k-down  of -5 rSCY+! endof
+    endcase
   again ;
 
 : main
