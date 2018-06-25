@@ -44,8 +44,9 @@ RAM CREATE pattern #patterns CELLS ALLOT
 
 : note++
   pattern[selected] dup
-  @ dup
+  @
   1+ #notes mod
+  dup
   rot !
   2 selected @ 2 * + 8 at-xy
   dup 0 = if ."  " then
@@ -57,8 +58,9 @@ RAM CREATE pattern #patterns CELLS ALLOT
 
 : note--
   pattern[selected] dup
-  @ dup
+  @
   1- #notes + #notes mod
+  dup
   rot !
   2 selected @ 2 * + 8 at-xy
   dup 0 = if ."  " then
@@ -99,11 +101,14 @@ RAM CREATE pattern #patterns CELLS ALLOT
     then
   again ;
 
+: erase 0 fill ;
+
 : main
   0 fcurr !
   0 current !
   0 selected !
   true key-released !
+  pattern #patterns cells erase
   init-term
   init-input
   page
