@@ -7,20 +7,33 @@ require cpu.fs
 
 [host]
 
+variable b1
+variable b2
+
+: |b1!
+  b1 @ or b1 ! ;
+: |b2!
+  b2 @ or b2 ! ;
+
 : l:
   parse-name
   dup 8 <> if true abort" The tile line length is wrong!" then
-  0 swap
+  0 b1 !
+  0 b2 !
   0 ?do
-    1 lshift
-    over i + c@ case
-      [char] X of 1 or endof
+    b1 @ 1 lshift b1 !
+    b2 @ 1 lshift b2 !
+    dup i + c@ case
+      [char] X of 1 |b1! 1 |b2! endof
+      [char] * of 1 |b2! endof
+      [char] - of 1 |b1! endof
       [char] . of      endof
       true abort" Wrong character!"
     endcase
   loop
-  nip
-  [target] c, [host] ;
+  drop
+  b2 @ b1 @
+  [target] c, c, [host] ;
 
 [target]
 
@@ -2338,6 +2351,6 @@ RAM
 : install-font
   disable-interrupts
   disable-lcd
-  TileData _VRAM [ 256 8 * ]L cmovemono 
+  TileData _VRAM [ 256 16 * ]L cmove
   enable-lcd
   enable-interrupts ;
