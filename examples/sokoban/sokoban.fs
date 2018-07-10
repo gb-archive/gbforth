@@ -37,7 +37,7 @@
 \ I could have used blocks as level tables, but as I don't have a good
 \ block editor for gforth now, I let it be.
 
-require ibm-font.fs
+require tile-font.fs
 require term.fs
 
 \ By default, we'll allocate everything into ROM
