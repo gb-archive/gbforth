@@ -39,6 +39,7 @@
 
 require ./tile-font.fs
 require term.fs
+require sfx.fs
 
 \ By default, we'll allocate everything into ROM
 ROM
@@ -152,7 +153,7 @@ ROM
 	S" @* " S"  &$" r@ play-rule
 	      IF  r> soko +!  1 rocks +! -1 score +!  EXIT  THEN
 	S" @$." S"  @*" r@ play-rule
-	      IF  r> soko +! -1 rocks +!  1 score +!  EXIT  THEN
+	      IF  r> soko +! -1 rocks +!  1 score +! play-sweep  EXIT  THEN
 	S" &*." S" .&*" r@ play-rule  IF  r> soko +!  EXIT  THEN
 	S" &$ " S" .@$" r@ play-rule  IF  r> soko +!  EXIT  THEN
 	S" & "  S" .@"  r@ play-rule  IF  r> soko +!  EXIT  THEN
@@ -160,8 +161,8 @@ ROM
 	S" &* " S" .&$" r@ play-rule
 	      IF  r> soko +!  1 rocks +! -1 score +!  EXIT  THEN
 	S" &$." S" .@*" r@ play-rule
-	      IF  r> soko +! -1 rocks +!  1 score +!  EXIT  THEN
-	-1 moves +!  r> drop  ;
+	      IF  r> soko +! -1 rocks +!  1 score +! play-sweep  EXIT  THEN
+	-1 moves +!  play-water r> drop  ;
 
 1            move: soko-right
 -1           move: soko-left
@@ -176,7 +177,7 @@ ROM
     BEGIN
 	rocks @ 0=
 	IF
-	    level# @ 1+ level  0= IF  EXIT  THEN
+	    level# @ 1+ level  play-noise 0= IF  EXIT  THEN
 	THEN
 	.maze
 	key
